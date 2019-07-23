@@ -1,0 +1,21 @@
+{
+    "name": "xgerhard/destiny-api-wrapper",
+    "description": "PHP wrapper for Destiny 2 API",
+    "type": "project",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Gerhard",
+            "email": "xgerhard@2g.be"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Destiny\\": "src/Destiny"
+        }
+    }
+}
