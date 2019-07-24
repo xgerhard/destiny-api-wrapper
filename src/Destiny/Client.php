@@ -2,19 +2,43 @@
 
 namespace Destiny;
 
+use Destiny\Player;
 use Destiny\Api\Client as ApiClient;
 use Destiny\Exceptions\PlayerNotFoundException;
-use Destiny\Player;
+use Destiny\Exceptions\InvalidPlayerParametersException;
 
 class Client
 {
-    private $api; // Destiny\Api\Client
+    public $api; // Destiny\Api\Client
 
     public function __construct($strApiKey)
     {
         $this->api = new ApiClient($strApiKey);
     }
 
+    /**
+     * Loads player based on membershipId & membershipType
+     *
+     * @param array $aPlayer [membershipId, membershipType]
+     *
+     * @return object Destiny\Player
+     */
+    public function loadPlayer($aPlayer)
+    {
+        if(!isset($aPlayer['membershipId']) || !isset($aPlayer['membershipType']))
+            throw new InvalidPlayerParametersException();
+
+        return new Player($aPlayer, $this->api);
+    }
+
+    /**
+     * Search Destiny player by DisplayName
+     *
+     * @param string $strDisplayName
+     * @param int $iMembershipType
+     *
+     * @return object Destiny\Player
+     */
     public function searchPlayer($strDisplayName, $iMembershipType = null)
     {
         $aPlayers = $this->api->searchDestinyPlayer($strDisplayName, $iMembershipType);

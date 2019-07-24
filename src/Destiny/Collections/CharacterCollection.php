@@ -3,12 +3,13 @@
 namespace Destiny\Collections;
 
 use Destiny\Player;
+use Destiny\Character;
 use Destiny\Api\Client as ApiClient;
 
 class CharacterCollection
 {
     private $fetched = false;
-    private $components = [200];
+    private $components = [200]; //, 201, 202, 204, 205];
 
     public function __construct(Player $oPlayer, ApiClient $oDestinyApi)
     {
@@ -17,14 +18,24 @@ class CharacterCollection
         $this->characters = [];
     }
 
-    public function getCharacters()
+    /**
+     * Get all characters
+     *
+     * @return array [Destiny\Character]
+     */
+    public function getAll()
     {
         $this->fetch();
 
         return $this->characters;
     }
 
-    public function current()
+    /**
+     * Get current / last played characters
+     *
+     * @return object Destiny\Character
+     */
+    public function getCurrent()
     {
         $this->fetch();
 
@@ -39,6 +50,7 @@ class CharacterCollection
 
     public function fetch($aComponents = [])
     {
+        // Only need to fetch the getProfile request once
         if($this->fetched)
             return;
 
@@ -47,9 +59,10 @@ class CharacterCollection
         {
             foreach($oCharacters->characters->data as $iMembershipId => $oCharacter)
             {
-                $this->characters[$iMembershipId] = $oCharacter;
+                $this->characters[$iMembershipId] = new Character($oCharacter);
             }
-            return $this->getCharacters();
+            $this->fetched = true;
+            return $this->getAll();
         }
 
         if(empty($this->characters))

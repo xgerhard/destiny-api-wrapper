@@ -18,7 +18,7 @@ class Client
     public function searchDestinyPlayer($strDisplayName, $iMembershipType = null)
     {
         return $this->request(
-            '/SearchDestinyPlayer/'. ($iMembershipType ? $iMembershipType : '-1') .'/'. rawurldecode($strDisplayName)
+            '/SearchDestinyPlayer/'. ($iMembershipType ? $iMembershipType : '-1') .'/'. rawurlencode($strDisplayName)
         );
     }
 
