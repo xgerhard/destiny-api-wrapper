@@ -45,7 +45,7 @@ try
 }
 catch(PlayerNotFoundException $e)
 {
-	// If no players could be found
+    // If no players could be found
     echo $e->getMessage();
 }
 ```
