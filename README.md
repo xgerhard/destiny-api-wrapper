@@ -52,7 +52,7 @@ catch(PlayerNotFoundException $e)
 
 **loadPlayer**
 
-If you store the player details in for example a database, you can load the `Destiny\Player` object by providing (at least) the player `membershipType` & `membershipId`.
+If you store the player details in for example a database, you can load the `Destiny\Player` object by providing (at least) the player `membershipType` and `membershipId`.
 
 ```php
 use Destiny\Client;
@@ -60,7 +60,7 @@ use Destiny\Exceptions\InvalidPlayerParametersException;
 
 try
 {
-	$oDestiny = new Destiny\Client('Bungie-API-key-here');
+    $oDestiny = new Destiny\Client('Bungie-API-key-here');
     $oPlayer = $oDestiny->loadPlayer([
         'membershipType' => 4,
         'membershipId' => '4611686018467322796',
@@ -71,7 +71,7 @@ try
 }
 catch(InvalidPlayerParametersException $e)
 {
-	// If required player data is missing
+    // If required player data is missing
     echo $e->getMessage();
 }
 ```
@@ -149,7 +149,7 @@ $aCharacters = $oPlayer->characters->fetch([200]);
 
 // If I want to check characters inventory
 $oPlayer->characters->fetch([
-	200, // Character basic info
+    200, // Character basic info
     205, // Character equipment
     300, // Item instances
     305 // Item sockets
@@ -158,7 +158,7 @@ $oPlayer->characters->fetch([
 // Get primary weapon for all characters
 foreach($oPlayer->characters->getAll() as $oCharacter)
 {
-	$oPrimary = $oCharacter->inventory->getPrimary();
+    $oPrimary = $oCharacter->inventory->getPrimary();
 }
 
 // Or just for the current character
