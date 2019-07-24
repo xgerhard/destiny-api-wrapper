@@ -31,7 +31,7 @@ use Destiny\Exceptions\PlayerNotFoundException;
 
 try
 {
-	$oDestiny = new Destiny\Client('Bungie-API-key-here');
+    $oDestiny = new Destiny\Client('Bungie-API-key-here');
     $oPlayer = $oDestiny->searchPlayer('xgerhard#21555');
 
     echo $oPlayer->membershipId; // 4611686018467322796
