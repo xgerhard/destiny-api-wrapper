@@ -8,7 +8,7 @@ use Destiny\Exceptions\DestinyApiException;
 class Client
 {
     private $apiKey;
-    private $baseUrl = 'https://www.bungie.net/Platform/Destiny2';
+    private $baseUrl = 'https://www.bungie.net/Platform';
 
     public function __construct($strApiKey)
     {
@@ -18,22 +18,22 @@ class Client
     public function searchDestinyPlayer($strDisplayName, $iMembershipType = null)
     {
         return $this->request(
-            '/SearchDestinyPlayer/'. ($iMembershipType ? $iMembershipType : '-1') .'/'. rawurlencode($strDisplayName)
+            '/Destiny2/SearchDestinyPlayer/'. ($iMembershipType ? $iMembershipType : '-1') .'/'. rawurlencode($strDisplayName)
         );
     }
 
     public function getLinkedProfiles($iMembershipType, $iMembershipId, $bAllMemberships = false)
     {
         return $this->request(
-            '/'. $iMembershipType .'/Profile/'. $iMembershipId .'LinkedPrifles/',
-            ['getAllMemberships' => $bAllMemberships]
+            '/Destiny2/'. $iMembershipType .'/Profile/'. $iMembershipId .'/LinkedProfiles/',
+            ['getAllMemberships' => ($bAllMemberships ? 'true' : 'false')]
         );
     }
 
     public function getProfile($iMembershipType, $iMembershipId, $aComponents = [200])
     {
         return $this->request(
-            '/'. $iMembershipType .'/Profile/'. $iMembershipId .'/',
+            '/Destiny2/'. $iMembershipType .'/Profile/'. $iMembershipId .'/',
             ['components' => implode(',', $aComponents)]
         );
     }
@@ -41,7 +41,7 @@ class Client
     public function getCharacter($iMembershipType, $iMembershipId, $iCharacterId, $aComponents = [])
     {
         return $this->request(
-            '/'. $iMembershipType .'/Profile/'. $iMembershipId .'/Character/'. $iCharacterId .'/',
+            '/Destiny2/'. $iMembershipType .'/Profile/'. $iMembershipId .'/Character/'. $iCharacterId .'/',
             ['components' => implode(',', $aComponents)]
         );
     }
@@ -49,7 +49,7 @@ class Client
     public function getVendors($iMembershipType, $iMembershipId, $iCharacterId, $aComponents = [])
     {
         return $this->request(
-            '/'. $iMembershipType .'/Profile/'. $iMembershipId .'/Character/'. $iCharacterId .'/Vendors/',
+            '/Destiny2/'. $iMembershipType .'/Profile/'. $iMembershipId .'/Character/'. $iCharacterId .'/Vendors/',
             ['components' => implode(',', $aComponents)]
         );
     }
@@ -57,7 +57,7 @@ class Client
     public function getVendor($iMembershipType, $iMembershipId, $iCharacterId, $iVendorHash, $aComponents = [])
     {
         return $this->request(
-            '/'. $iMembershipType .'/Profile/'. $iMembershipId .'/Character/'. $iCharacterId .'/Vendors/'. $iVendorHash .'/',
+            '/Destiny2/'. $iMembershipType .'/Profile/'. $iMembershipId .'/Character/'. $iCharacterId .'/Vendors/'. $iVendorHash .'/',
             ['components' => implode(',', $aComponents)]
         );
     }
@@ -70,7 +70,7 @@ class Client
     public function getHistoricalStats($iMembershipType, $iMembershipId, $iCharacterId = 0, $aParameters = [])
     {
         return $this->request(
-            '/'. $iMembershipType .'/Account/'. $iMembershipId .'/Character/'. $iCharacterId .'/Stats/',
+            '/Destiny2/'. $iMembershipType .'/Account/'. $iMembershipId .'/Character/'. $iCharacterId .'/Stats/',
             $aParameters
         );
     }
@@ -78,6 +78,13 @@ class Client
     public function getActivityHistory()
     {
         
+    }
+
+    public function searchUser($strUser)
+    {
+        return $this->request(
+            '/User/SearchUsers/?q='. rawurlencode($strUser)
+        );
     }
 
     private function request($strUrl, $aParameters = [], $strMethod = 'GET', $aHeaders = [], $aPost = [])

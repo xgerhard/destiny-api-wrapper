@@ -9,7 +9,7 @@ use Destiny\Api\Client as ApiClient;
 class CharacterCollection
 {
     private $fetched = false;
-    private $components = [200]; //, 201, 202, 204, 205];
+    private $components = [200, 201, 202, 204, 205];
 
     public function __construct(Player $oPlayer, ApiClient $oDestinyApi)
     {
@@ -59,7 +59,12 @@ class CharacterCollection
         {
             foreach($oCharacters->characters->data as $iMembershipId => $oCharacter)
             {
-                $this->characters[$iMembershipId] = new Character($oCharacter);
+                $this->characters[$iMembershipId] = new Character(
+                    $oCharacter,
+                    (isset($oCharacters->characterInventories->data->{$iMembershipId}) ? $oCharacters->characterInventories->data->{$iMembershipId} : null),
+                    (isset($oCharacters->characterProgressions->data->{$iMembershipId}) ? $oCharacters->characterProgressions->data->{$iMembershipId} : null),
+                    (isset($oCharacters->characterActivities->data->{$iMembershipId}) ? $oCharacters->characterActivities->data->{$iMembershipId} : null)
+                );
             }
             $this->fetched = true;
             return $this->getAll();

@@ -3,8 +3,10 @@
 namespace Destiny;
 
 use Destiny\Player;
+use Destiny\User;
 use Destiny\Api\Client as ApiClient;
 use Destiny\Exceptions\PlayerNotFoundException;
+use Destiny\Exceptions\UserNotFoundException;
 use Destiny\Exceptions\InvalidPlayerParametersException;
 
 class Client
@@ -44,7 +46,7 @@ class Client
         $aPlayers = $this->api->searchDestinyPlayer($strDisplayName, $iMembershipType);
         if(!empty($aPlayers))
         {
-            if(count($aPlayers) > 1 && $iMembershipType)
+            if($iMembershipType)
             {
                 $aTempPlayers = [];
                 foreach($aPlayers as $oPlayer)
@@ -59,5 +61,52 @@ class Client
             return new Player($aPlayers[0], $this->api);
         }
         throw new PlayerNotFoundException($strDisplayName);
+    }
+
+    /**
+     * Search Destiny user by UniqueName
+     *
+     * @param string $strUser
+     *
+     * @return object Destiny\User
+     */
+    public function searchUser($strUser, $bLinkedPlayers = false)
+    {
+        $aUsers = $this->api->searchUser($strUser);
+        if(!empty($aUsers))
+        {
+            foreach($aUsers as $oUser)
+            {
+                if(strtolower($strUser) == strtolower($oUser->uniqueName))
+                    return new User($oUser, $this->api);
+            }
+        }
+        throw new UserNotFoundException($strUser);
+    }
+
+    /**
+     * Search Destiny player by displayName or UniqueName
+     *
+     * @param string $strUser
+     *
+     * @return object Destiny\User
+     */
+    public function searchPlayerUser($strUser, $iMembershipType = null)
+    {
+        try
+        {
+            return $this->searchPlayer($strUser, $iMembershipType);
+        }
+        catch(PlayerNotFoundException $e)
+        {
+            try
+            {
+                return $this->searchUser($strUser, true)->profiles->getCurrent();
+            }
+            catch(UserNotFoundException $e)
+            {
+                throw new PlayerNotFoundException($strUser);
+            }
+        }
     }
 }
