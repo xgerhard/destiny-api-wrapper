@@ -12,14 +12,14 @@ class Character
     public $activities;
     public $progressions;
 
-    public function __construct($oCharacter, $oInventory = null, $oActivities = null, $oProgressions = null)
+    public function __construct($oCharacter, $aInventory = null, $oActivities = null, $oProgressions = null)
     {
         foreach($oCharacter as $key => $value)
         {
             $this->{$key} = $value;
         }
 
-        $this->inventory = new InventoryCollection($oInventory);
+        $this->inventory = new InventoryCollection($aInventory);
         $this->activities = new ActivityCollection($oActivities);
         $this->progressions = new ProgressionCollection($oProgressions);
     }

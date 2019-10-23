@@ -61,7 +61,11 @@ class CharacterCollection
             {
                 $this->characters[$iMembershipId] = new Character(
                     $oCharacter,
-                    (isset($oCharacters->characterInventories->data->{$iMembershipId}) ? $oCharacters->characterInventories->data->{$iMembershipId} : null),
+                    [
+                        'equipment' => (isset($oCharacters->characterEquipment->data->{$iMembershipId}->items) ? $oCharacters->characterEquipment->data->{$iMembershipId}->items : null),
+                        'instances' => (isset($oCharacters->itemComponents->instances->data) ? $oCharacters->itemComponents->instances->data : null),
+                        'sockets' => (isset($oCharacters->itemComponents->sockets->data) ? $oCharacters->itemComponents->sockets->data : null)
+                    ],
                     (isset($oCharacters->characterProgressions->data->{$iMembershipId}) ? $oCharacters->characterProgressions->data->{$iMembershipId} : null),
                     (isset($oCharacters->characterActivities->data->{$iMembershipId}) ? $oCharacters->characterActivities->data->{$iMembershipId} : null)
                 );

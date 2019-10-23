@@ -71,7 +71,7 @@ class Client
      *
      * @return object Destiny\User
      */
-    public function searchUser($strUser, $bLinkedPlayers = false)
+    public function searchUser($strUser)
     {
         $aUsers = $this->api->searchUser($strUser);
         if(!empty($aUsers))
@@ -102,7 +102,7 @@ class Client
         {
             try
             {
-                return $this->searchUser($strUser, true)->profiles->getCurrent();
+                return $this->searchUser($strUser)->profiles->getCurrent();
             }
             catch(UserNotFoundException $e)
             {
