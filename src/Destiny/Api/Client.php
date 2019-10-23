@@ -87,6 +87,25 @@ class Client
         );
     }
 
+    public function getManifest($strDatabase = false)
+    {
+        if($strDatabase)
+        {
+            $oGuzzle = new GuzzleClient([
+                'http_errors' => false, 
+                'verify' => false,
+                'headers' => ['X-API-Key' => $this->apiKey]
+            ]);
+            return $oGuzzle->get('https://bungie.net'. $strDatabase)->getBody();
+        }
+        else
+        {
+            return $this->request(
+                '/Destiny2/Manifest/'
+            );
+        }
+    }
+
     private function request($strUrl, $aParameters = [], $strMethod = 'GET', $aHeaders = [], $aPost = [])
     {
         $aHeaders = array_merge([

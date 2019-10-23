@@ -4,6 +4,7 @@ namespace Destiny;
 
 use Destiny\Player;
 use Destiny\User;
+use Destiny\Manifest;
 use Destiny\Api\Client as ApiClient;
 use Destiny\Exceptions\PlayerNotFoundException;
 use Destiny\Exceptions\UserNotFoundException;
@@ -108,5 +109,27 @@ class Client
                 throw new PlayerNotFoundException($strUser);
             }
         }
+    }
+
+    /**
+     * Checks and updates the Manifest if needed
+     *
+     * @return boolean
+     */
+    public function updateManifest()
+    {
+        $oManifest = new Manifest($this->api);
+        return $oManifest->check();
+    }
+
+    /**
+     * Returns the Manifest
+     *
+     * @return object Destiny\Manifest
+     */
+    public function getManifest($strLang = null)
+    {
+        // Should probably do something with language here one day
+        return new Manifest();
     }
 }

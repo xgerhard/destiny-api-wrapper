@@ -23,9 +23,9 @@ class CharacterCollection
      *
      * @return array [Destiny\Character]
      */
-    public function getAll()
+    public function getAll($aComponents = [])
     {
-        $this->fetch();
+        $this->fetch($aComponents);
 
         return $this->characters;
     }
@@ -35,9 +35,9 @@ class CharacterCollection
      *
      * @return object Destiny\Character
      */
-    public function getCurrent()
+    public function getCurrent($aComponents = [])
     {
-        $this->fetch();
+        $this->fetch($aComponents);
 
         $oLastPlayerCharacter = false;
         foreach($this->characters as $oCharacter)
