@@ -1,7 +1,7 @@
 {
     "name": "xgerhard/destiny-api-wrapper",
     "description": "PHP wrapper for Destiny 2 API",
-    "type": "project",
+    "type": "package",
     "license": "mit",
     "authors": [
         {
