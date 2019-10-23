@@ -45,13 +45,13 @@ class Manifest
         $strCachePath = $this->manifest_path .'cache/'. pathinfo($strDatabase, PATHINFO_BASENAME);
 
         // Create cache folder if not exists
-        if (!file_exists(dirname($strCachePath)))
+        if(!file_exists(dirname($strCachePath)))
             mkdir(dirname($strCachePath), 0777, true);
 
         // Store zip and unzip
         file_put_contents($strCachePath.'.zip', $zData);
         $zZip = new ZipArchive();
-        if ($zZip->open($strCachePath .'.zip') === true)
+        if($zZip->open($strCachePath .'.zip') === true)
         {
             $zZip->extractTo($this->manifest_path .'cache');
             $zZip->close();
@@ -59,14 +59,14 @@ class Manifest
 
         // Extract table names to export to settings
         $aTables = [];
-        if ($db = new SQLite3($strCachePath))
+        if($db = new SQLite3($strCachePath))
         {
             $oResult = $db->query("SELECT name FROM sqlite_master WHERE type='table'");
             while($aRow = $oResult->fetchArray()) 
             {
                 $aTable = [];
                 $oResult2 = $db->query("PRAGMA table_info(". $aRow['name'] .")");
-                while($aRow2 = $oResult2->fetchArray()) 
+                while($aRow2 = $oResult2->fetchArray())
                 {
                     $aTable[] = $aRow2[1];
                 }
@@ -84,33 +84,35 @@ class Manifest
     public function loadSettings()
     {
         if(!file_exists($this->setting_file))
-            return (object) [];
+            return (object)[];
 
         return json_decode(file_get_contents($this->setting_file));
     }
 
-    public function setSetting($name, $value) 
+    public function setSetting($name, $value)
     {
         $this->settings->{$name} = $value;
         file_put_contents($this->setting_file, json_encode($this->settings));
     }
 
-    public function getSetting($name) 
+    public function getSetting($name)
     {
-        if (isset($this->settings->{$name})) return $this->settings->{$name};
+        if(isset($this->settings->{$name}))
+            return $this->settings->{$name};
+
         return '';
     }
 
-    public function queryManifest($strQuery) 
+    public function queryManifest($strQuery)
     {
         $strDatabase = $this->getSetting('database');
         $strCacheFilePath = $this->manifest_path .'cache/'. pathinfo($strDatabase, PATHINFO_BASENAME);
 
         $aResults = [];
-        if ($db = new SQLite3($strCacheFilePath)) 
+        if($db = new SQLite3($strCacheFilePath))
         {
             $oResult = $db->query($strQuery);
-            while($aRow = $oResult->fetchArray()) 
+            while($aRow = $oResult->fetchArray())
             {
                 $strKey = is_numeric($aRow[0]) ? sprintf('%u', $aRow[0] & 0xFFFFFFFF) : $aRow[0];
                 $aResults[$strKey] = json_decode($aRow[1]);
@@ -119,8 +121,9 @@ class Manifest
         return $aResults;
     }
 
-    public function browseDefinition($strTableName) 
+    public function browseDefinition($strTableName)
     {
+        $strTableName = 'Destiny'. $strTableName .'Definition';
         return $this->queryManifest('SELECT * FROM '. $strTableName);
     }
 
