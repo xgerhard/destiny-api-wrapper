@@ -2,25 +2,10 @@
 
 namespace Destiny;
 
-use Destiny\Collections\InventoryCollection;
-use Destiny\Collections\ActivityCollection;
-use Destiny\Collections\ProgressionCollection;
-
-class Character
+class Character extends Model
 {
-    public $inventory;
-    public $activities;
-    public $progressions;
-
-    public function __construct($oCharacter, $aInventory = null, $oActivities = null, $oProgressions = null)
+    public function __construct($aProperties)
     {
-        foreach($oCharacter as $key => $value)
-        {
-            $this->{$key} = $value;
-        }
-
-        $this->inventory = new InventoryCollection($aInventory);
-        $this->activities = new ActivityCollection($oActivities);
-        $this->progressions = new ProgressionCollection($oProgressions);
+        parent::__construct($aProperties);
     }
 }
