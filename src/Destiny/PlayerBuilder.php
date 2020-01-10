@@ -13,7 +13,9 @@ class PlayerBuilder
     private $displayName;
     private $membershipType;
     private $membershipId;
-    private $components = [];
+    private $components = [100];
+
+    private $historicalStats;
 
     public function withClient(DestinyClient $client)
     {
@@ -43,12 +45,19 @@ class PlayerBuilder
         return $this;
     }
 
-    public function withComponents($component)
+    public function withProfileComponents($component)
     {
         if(is_array($component))
             $this->components = array_merge($this->components, $component);
         else
             $this->components[] = $component;
+
+        return $this;
+    }
+
+    public function withHistoricalStats(HistoricalStatsBuilder $oHistoricalStatsBuilder)
+    {
+        $this->historicalStats = $oHistoricalStatsBuilder;
 
         return $this;
     }
@@ -63,12 +72,20 @@ class PlayerBuilder
             $this->getComponents()
         );
 
+        if($this->historicalStats)
+        {
+            // Fetch historical stats
+        }
+
         $oPlayer = new Player;
         return $oPlayer->fromBuilder($this, (array) $oProfile);
     }
 
     public function validate()
     {
+        if($this->client === null)
+            throw new InvalidArgumentException('A client must be initialized, use the DestinyClientBuilder');
+
         if($this->membershipType === null)
             throw new InvalidArgumentException('A membershipType must be set');
         else
