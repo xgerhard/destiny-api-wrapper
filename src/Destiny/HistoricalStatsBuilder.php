@@ -86,9 +86,9 @@ class HistoricalStatsBuilder
             foreach($this->modes as $i => $mode)
             {
                 if(isset($aModes[strtoupper($mode)]))
-                    $this->modes[$i] = strtolower($mode);
+                    $this->modes[$i] = $aModes[strtoupper($mode)];
                 elseif(in_array($mode, array_values($aModes)))
-                    $this->modes[$i] = strtolower(array_search($mode, $aModes));
+                    $this->modes[$i] = $mode;
                 else
                     throw new InvalidArgumentException('Invalid ActivityModeType provided');
             }
@@ -152,6 +152,17 @@ class HistoricalStatsBuilder
     public function getPeriodType()
     {
         return $this->periodType;
+    }
+
+    public function getParameters()
+    {
+        return array_filter([
+            'dayend' => $this->getDayEnd(),
+            'daystart' => $this->getDayStart(),
+            'groups' => (!empty($this->getGroups()) ? implode(',', $this->getGroups()) : null),
+            'modes' => (!empty($this->getModes()) ? implode(',', $this->getModes()) : null),
+            'periodType' => $this->getPeriodType()
+        ]);
     }
 }
 ?>
