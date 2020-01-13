@@ -66,17 +66,41 @@ class PlayerBuilder
     {
         $this->validate();
 
+        // Fetch Profile
         $oProfile = $this->client->api->getProfile(
             $this->getMembershipType(),
             $this->getMembershipId(),
             $this->getComponents()
         );
 
+        // Fetch historical stats
         if($this->historicalStats)
         {
-            // Fetch historical stats
+            $aHistoricalStats = [];
+            if(isset($oProfile->characters->data) && !empty($oProfile->characters->data))
+            {
+                foreach($oProfile->characters->data as $iCharacterId => $oCharacter)
+                {
+                    $oCharacter->historicalStats = $this->client->api->getHistoricalStats(
+                        $this->getMembershipType(),
+                        $this->getMembershipId(),
+                        $iCharacterId,
+                        $this->historicalStats->getParameters()
+                    );
+                }
+            }
+            else
+            {
+                $oProfile->historicalStats = $this->client->api->getHistoricalStats(
+                    $this->getMembershipType(),
+                    $this->getMembershipId(),
+                    0,
+                    $this->historicalStats->getParameters()
+                );
+            }
         }
-
+        
+        // Build player model
         $oPlayer = new Player;
         return $oPlayer->fromBuilder($this, (array) $oProfile);
     }

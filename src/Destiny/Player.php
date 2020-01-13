@@ -21,7 +21,12 @@ class Player extends Model
 
     public function getCharacters()
     {
-        return new CharacterCollection($this->properties['characters']);
+        return isset($this->properties['characters']) ? new CharacterCollection($this->properties['characters']) : null;
+    }
+
+    public function getHistoricalStats()
+    {
+        return isset($this->properties['historicalStats']) ? new StatCollection($this->properties['historicalStats']) : null;
     }
 
     public function fromApi($oPlayer)

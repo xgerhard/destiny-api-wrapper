@@ -8,4 +8,9 @@ class Character extends Model
     {
         parent::__construct($aProperties);
     }
+
+    public function getHistoricalStats()
+    {
+        return isset($this->properties['historicalStats']) ? new StatCollection($this->properties['historicalStats']) : null;
+    }
 }
